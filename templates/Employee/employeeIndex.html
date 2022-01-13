@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block body %}
+<h1>Employees</h1><br/>
+
+<div class="container ">
+    <div class="row">
+        <div class="col md-12">
+            <h3><button type="button" class="btn btn-outline-success" data-toggle="modal" data-target = "#addEmployeeModel">Add Employee</button></h3>
+            <table class="table table-hover table-bordered">
+                <tr class="list-group-horizontal">
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th></th>
+                </tr>
+
+                {% for employee in employees %}
+                <tr>
+                    <td>{{employee.name}}</td>
+                    <td>{{employee.phoneNumber}}</td>
+                    <td>
+                        <a href="/update/{{employee.id}}" class="btn btn-warning" data-toggle="modal" data-target="#modelEdit{{employee.id}}">Edit</a>&emsp;
+                        <a href="/delete/{{employee.id}}" class="btn btn-danger" onclick="return confirm('Delete {{employee.name}}?')">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+
+    {% for employee in employees %}
+    <div id="modelEdit{{employee.id}}" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{employee.name}}</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form action="{{url_for('Employee.updateEmployee')}}" method="POST">
+                        <input type="hidden"  name="id" value="{{employee.id}}">
+                        <div class="form-group">
+                            <label>Name:</label>
+                            <input type="text" class="form-control" name="name" value="{{employee.name}}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phone:</label>
+                            <input type="text" class="form-control" name="phoneNumber" value="{{employee.phoneNumber}}">
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-primary" type="submit">Update</button>
+                        </div>
+
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div id="addEmployeeModel" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">New Employee</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form action="{{url_for('Employee.addEmployee')}}" method="POST">
+
+                        <div class="form-group">
+                            <label>Name:</label>
+                            <input type="hidden"  name="id" value="">
+                            <input type="text" class="form-control" name="name" value="" required="true">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phone:</label>
+                            <input type="text" class="form-control" name="phoneNumber" value="" required="true">
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-primary" type="submit">Add</button>
+                        </div>
+
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
